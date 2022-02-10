@@ -16,7 +16,7 @@ services:
       - jobmanager
     container_name: taskmanager
     network_mode: host
-    user: "ubuntu"
+    # user: "ubuntu"
     command: taskmanager
     environment: 
       - ENABLE_BUILT_IN_PLUGINS=flink-s3-fs-hadoop-1.13.5.jar
@@ -31,7 +31,7 @@ services:
     image: flink:1.13.5-scala_2.12-java11
     container_name: jobmanager
     network_mode: host
-    user: "ubuntu"
+    # user: "ubuntu"
     depends_on:
       - cmak
     # ports:
