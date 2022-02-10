@@ -1,0 +1,27 @@
+taskmanager.memory.process.size: 1728m
+taskmanager.numberOfTaskSlots: 10
+parallelism.default: 1
+
+env.log.dir: /data/flink/logs
+
+high-availability: zookeeper
+high-availability.zookeeper.quorum: localhost:2181
+high-availability.zookeeper.path.root: /flink
+high-availability.cluster-id: /cluster_one
+high-availability.storageDir: file:///data/flink/ha # s3://seayoo-dev-analytics/flink/ha
+zookeeper.sasl.disable: true
+
+state.backend: rocksdb
+state.checkpoints.dir: /data/flink/checkpoints # s3://seayoo-dev-analytics/flink/checkpoints
+state.checkpoint-storage: filesystem
+state.savepoints.dir: /data/flink/savepoints # s3://seayoo-dev-analytics/flink/savepoints
+execution.checkpointing.interval: 60000
+state.checkpoints.num-retained: 10
+
+# s3.access-key: 
+# s3.secret-key: 
+# s3.endpoint: s3.cn-northwest-1.amazonaws.com.cn
+
+# fs.allowed-fallback-filesystems: s3
+
+# 以下信息为 Flink 自动添加，可以删除

@@ -1,0 +1,86 @@
+version: "3.7"
+
+services:
+  fluent-bit:
+    image: docker.shiyou.kingsoft.com/mirror/fluent/fluent-bit:1.8.9
+    container_name: fluent-bit-producer
+    network_mode: host
+    depends_on:
+      - taskmanager
+    volumes:
+      - ./config/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./data/fluent-bit:/fluent-bit/tmp
+  taskmanager:
+    image: docker.shiyou.kingsoft.com/mirror/flink:1.13.3-scala_2.12-java11
+    depends_on:
+      - jobmanager
+    container_name: taskmanager
+    network_mode: host
+    user: "1000"
+    command: taskmanager
+    # environment: 
+    #   - ENABLE_BUILT_IN_PLUGINS=flink-s3-fs-hadoop-1.13.3.jar
+    volumes: 
+      - ./config/flink-taskmanager-conf.yaml:/opt/flink/conf/flink-conf.yaml
+      - ./data/flink/ha:/data/flink/ha
+      - ./data/flink/checkpoints:/data/flink/checkpoints
+      - ./data/flink/savepoints:/data/flink/savepoints
+      - ./data/flink/logs:/data/flink/logs
+      - ./data/output:/var/tmp/flink
+  jobmanager: 
+    image: docker.shiyou.kingsoft.com/mirror/flink:1.13.3-scala_2.12-java11
+    container_name: jobmanager
+    network_mode: host
+    user: "1000"
+    depends_on:
+      - cmak
+    # ports:
+    #   - "8080:8080"
+    # environment: 
+    #   - ENABLE_BUILT_IN_PLUGINS=flink-s3-fs-hadoop-1.13.3.jar
+    volumes:
+      - ./config/flink-jobmanager-conf.yaml:/opt/flink/conf/flink-conf.yaml
+      - ./data/flink/ha:/data/flink/ha
+      - ./data/flink/checkpoints:/data/flink/checkpoints
+      - ./data/flink/savepoints:/data/flink/savepoints
+      - ./data/flink/logs:/data/flink/logs
+      - ./data/flink/jars:/data/flink/jars
+    command: jobmanager
+  cmak:
+    image: docker.shiyou.kingsoft.com/mirror/hlebalbau/kafka-manager:3.0.0.5
+    container_name: cmak
+    network_mode: host
+    depends_on:
+      - kafka
+    # ports:
+    #   - "9000:9000"
+    environment:
+      ZK_HOSTS: localhost:2181
+  kafka:
+    image: docker.shiyou.kingsoft.com/mirror/confluentinc/cp-kafka:7.0.0
+    container_name: kafka
+    network_mode: host
+    depends_on:
+      - zookeeper
+    # ports:
+    #   - "9092:9092"
+    #   - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'localhost:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+  zookeeper:
+    image: docker.shiyou.kingsoft.com/mirror/confluentinc/cp-zookeeper:7.0.0
+    hostname: zookeeper
+    container_name: zookeeper
+    network_mode: host
+    # ports:
+    #   - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
