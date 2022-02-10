@@ -4,9 +4,6 @@ rest.bind-port: 8081
 # rest.bind-address: "0.0.0.0"
 query.server.port: 6125
 
-env.log.dir: /data/flink/logs
-web.upload.dir: /data/flink/jars
-
 jobmanager.memory.process.size: 1600m
 
 high-availability: zookeeper
