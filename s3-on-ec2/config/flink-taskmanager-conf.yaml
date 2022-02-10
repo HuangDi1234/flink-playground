@@ -21,7 +21,7 @@ state.checkpoints.num-retained: 10
 s3.endpoint: s3.cn-northwest-1.amazonaws.com.cn
 fs.s3a.aws.credentials.provider: org.apache.hadoop.fs.s3a.auth.AssumedRoleCredentialProvider
 fs.s3a.assumed.role.credentials.provider: com.amazonaws.auth.InstanceProfileCredentialsProvider
-fs.s3a.assumed.role.arn: arn:aws-cn:iam::552340821054:role/shiyou-cn-labs/service/flink-20220119065534451400000001
+fs.s3a.assumed.role.arn: arn:aws:iam::121828301502:role/shiyou-labs/service/flink-20220210080848245200000001
 
 fs.allowed-fallback-filesystems: s3
 
