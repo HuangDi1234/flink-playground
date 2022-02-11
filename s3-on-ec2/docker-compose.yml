@@ -38,8 +38,10 @@ services:
     #   - "8080:8080"
     environment: 
       - ENABLE_BUILT_IN_PLUGINS=flink-s3-fs-hadoop-1.13.5.jar
+      # - AWS_REGION=ap-east-1
     volumes:
       - ./config/flink-jobmanager-conf.yaml:/opt/flink/conf/flink-conf.yaml
+      - ./config/log4j-console.properties:/opt/flink/conf/log4j-console.properties
       - ./data/flink/ha:/data/flink/ha
       - ./data/flink/checkpoints:/data/flink/checkpoints
       - ./data/flink/savepoints:/data/flink/savepoints

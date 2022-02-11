@@ -10,21 +10,26 @@ high-availability: zookeeper
 high-availability.zookeeper.quorum: localhost:2181
 high-availability.zookeeper.path.root: /flink
 high-availability.cluster-id: /cluster_one
-high-availability.storageDir: s3a://shiyou-labs-dev-analytics/flink/ha
+high-availability.storageDir: s3://shiyou-labs-dev-analytics/flink/ha
 zookeeper.sasl.disable: true
 
 state.backend: rocksdb
-state.checkpoints.dir: s3a://shiyou-labs-dev-analytics/flink/checkpoints
+state.checkpoints.dir: s3://shiyou-labs-dev-analytics/flink/checkpoints
 state.checkpoint-storage: filesystem
-state.savepoints.dir: s3a://shiyou-labs-dev-analytics/flink/savepoints
+state.savepoints.dir: s3://shiyou-labs-dev-analytics/flink/savepoints
 execution.checkpointing.interval: 60000
 state.checkpoints.num-retained: 10
 
-# s3.endpoint: s3.cn-northwest-1.amazonaws.com.cn
+# s3.endpoint: s3.ap-east-1.amazonaws.com
 fs.s3a.aws.credentials.provider: org.apache.hadoop.fs.s3a.auth.AssumedRoleCredentialProvider
 fs.s3a.assumed.role.credentials.provider: com.amazonaws.auth.InstanceProfileCredentialsProvider
-fs.s3a.assumed.role.arn: arn:aws:iam::121828301502:role/shiyou-labs/service/flink-20220210080848245200000001
+fs.s3a.assumed.role.arn: arn:aws:iam::121828301502:role/shiyou-labs/service/flink-20220211000835530100000001
 fs.s3a.endpoint: s3.ap-east-1.amazonaws.com
+# fs.s3a.bucket.shiyou-labs-dev-analytics.endpoint: s3.ap-east-1.amazonaws.com
+# fs.s3a.signing-algorithm: AWSS3V4SignerType
+# fs.s3a.s3.signing-algorithm: AWSS3V4SignerType
+env.java.opts: "-Dcom.amazonaws.services.s3.enableV4 -D"
+# fs.s3.impl: org.apache.hadoop.fs.s3a.S3AFileSystem
 
 fs.allowed-fallback-filesystems: s3
 
